@@ -1,0 +1,13 @@
+cradle:
+  cabal:
+    - path: "src"
+      component: "lib:MineHaskell"
+
+    - path: "app/Main.hs"
+      component: "MineHaskell:exe:MineHaskellExe"
+
+    - path: "app/MolecularAssembler.hs"
+      component: "MineHaskell:exe:MineHaskellExe"
+
+    - path: "test"
+      component: "MineHaskell:test:tests"
