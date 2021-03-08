@@ -6,9 +6,9 @@ module MolecularAssembler
   ) where
 
 data Dimensions = Dimensions
-  { l :: Int
-  , w :: Int
-  , h :: Int
+  { length :: Int
+  , width :: Int
+  , height :: Int
   }
   deriving (Show, Eq)
 
@@ -54,7 +54,7 @@ findCoreSize (Dimensions l w h) = (l - 2) * (w - 2) * (h - 2)
 
 findBlocksIn :: Dimensions -> Blocks
 findBlocksIn a =
-  let wall = findWallSize a
-      vent = findVentSize a
-      core = findCoreSize a
-  in  Blocks wall vent core
+  let wallSize = findWallSize a
+      ventSize = findVentSize a
+      coreSize = findCoreSize a
+  in  Blocks wallSize ventSize coreSize

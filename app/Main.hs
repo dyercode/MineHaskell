@@ -1,6 +1,7 @@
 module Main where
 
-import           MolecularAssembler             ( createCube, findBlocksNeeded
+import           MolecularAssembler             ( createCube
+                                                , findBlocksNeeded
                                                 )
 main :: IO ()
 main = case (createCube 3, createCube 4) of
