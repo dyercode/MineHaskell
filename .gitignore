@@ -4,3 +4,7 @@
 dist-newstyle
 cabal.project.local*
 dist
+*.hp
+*.ps
+*.prof
+*.aux

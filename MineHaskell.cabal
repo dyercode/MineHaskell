@@ -26,6 +26,7 @@ common shared-properties
     default-language: Haskell2010
     ghc-options:
       -Wall
+      -- -fprof-auto -rtsopts
 
 library
     import:           shared-properties

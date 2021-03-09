@@ -9,7 +9,7 @@ where
 
 import MolecularAssembler
   ( createCube,
-    createDimensions,
+    createLegalAssembler,
   )
 import Test.Tasty
 import Test.Tasty.HUnit
@@ -28,7 +28,7 @@ unitTests =
   testGroup
     "Unit Tests"
     [ testCase "cube creates dimensions with same size sides" $
-        createCube 3
-          @?= createDimensions 3 3 3,
-      testCase "cube does not work when size too small" $ createCube 2 @?= Nothing
+        createCube 3 @?= createLegalAssembler 3 3 3,
+      testCase "cube does not work when size too small" $
+        createCube 2 @?= Nothing
     ]
