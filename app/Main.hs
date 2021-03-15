@@ -1,6 +1,7 @@
 module Main where
 
 import Data.Bitraversable
+import Data.Either.Validation
 import Data.List
 import Data.Maybe
 import MolecularAssembler
@@ -16,9 +17,9 @@ main =
   -- do
   -- mapM_ print findUpDowns
   case (createCube 3, createCube 4) of
-    (Just a, Just b) -> print (calcBlocksNeeded a b)
-    (Nothing, _) -> print "first dimensions too small"
-    (_, Nothing) -> print "second dimensions too small"
+    (Success a, Success b) -> print (calcBlocksNeeded a b)
+    (Failure f, _) -> print ("first dimensions too small\n" ++ show f)
+    (_, Failure f) -> print ("second dimensions too small\n" ++ show f)
 
 findUpDowns :: [((Dimensions, Dimensions), Blocks)]
 findUpDowns =
@@ -66,8 +67,13 @@ ohDeargod =
         return (a, b)
     )
 
+unexplain :: Validation err a -> Maybe a
+unexplain v = case v of
+  Success a -> Just a
+  Failure _ -> Nothing
+
 cd :: (Int, Int, Int) -> Maybe Dimensions
-cd (l, w, h) = createLegalAssembler l w h
+cd (l, w, h) = unexplain (createLegalAssembler l w h)
 
 dm :: (Maybe a, Maybe b) -> Maybe (a, b)
 dm (Just a, Just b) = Just (a, b)

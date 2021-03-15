@@ -8,6 +8,9 @@ module MolecularAssembler
   )
 where
 
+import Data.Bifunctor
+import Data.Either.Validation
+
 data Dimensions = Dimensions
   { length :: Int,
     width :: Int,
@@ -22,21 +25,19 @@ data Blocks = Blocks
   }
   deriving (Show)
 
--- could be either spitting out which dim is wrong, but just want to get working for now
+checkSmallness :: Int -> String -> Validation [String] Int
+checkSmallness d name
+  | d < 3 = Failure [name ++ " is too small"]
+  | otherwise = Success d
 
 -- | Tries to 'Dimensions' enforcing a minimum size of 3x3x3
-createLegalAssembler :: Int -> Int -> Int -> Maybe Dimensions
-createLegalAssembler l w h
-  | tooSmall l = Nothing
-  | tooSmall w = Nothing
-  | tooSmall h = Nothing
-  | otherwise = Just (Dimensions l w h)
-  where
-    tooSmall = (< 3)
+createLegalAssembler :: Int -> Int -> Int -> Validation [String] Dimensions
+createLegalAssembler l w h =
+  Dimensions <$> checkSmallness l "length" <*> checkSmallness w "width" <*> checkSmallness h "height"
 
 -- | alias to createDimensions supplying equal sides
-createCube :: Int -> Maybe Dimensions
-createCube s = createLegalAssembler s s s
+createCube :: Int -> Validation [String] Dimensions
+createCube s = first (const ["Sides were < 3"]) (createLegalAssembler s s s)
 
 -- | Calculates number of each block type needed to increase 'assembler' to 'desired' size
 -- Including refunded blocks when downgrading or changing shape

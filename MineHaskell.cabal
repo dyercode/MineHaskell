@@ -30,6 +30,7 @@ common shared-properties
 
 library
     import:           shared-properties
+    build-depends:    either
     exposed-modules:  MolecularAssembler
     hs-source-dirs:   src
 
@@ -42,7 +43,7 @@ executable MineHaskellExe
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
-    build-depends:    MineHaskell
+    build-depends:    MineHaskell,either
     hs-source-dirs:   app
 
 
@@ -53,7 +54,8 @@ Test-Suite tests
     -- test-module:      Spec
     build-depends:    MineHaskell,
                       tasty,
-                      tasty-hunit
+                      tasty-hunit,
+                      either
     hs-source-dirs:   test
     main-is:          Spec.hs
 
