@@ -5,6 +5,7 @@ module MolecularAssembler
     calcBlocksIn,
     Blocks (..),
     Dimensions,
+    LegalAssembler,
   )
 where
 
@@ -23,7 +24,7 @@ data Blocks = Blocks
     vent :: Int,
     core :: Int
   }
-  deriving (Show)
+  deriving (Show, Eq)
 
 data LegalAssembler = LegalAssembler Int Int Int
   deriving (Show, Eq)

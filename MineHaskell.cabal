@@ -55,6 +55,8 @@ Test-Suite tests
     build-depends:    MineHaskell,
                       tasty,
                       tasty-hunit,
+                      hedgehog,
+                      tasty-hedgehog,
                       either
     hs-source-dirs:   test
     main-is:          Spec.hs

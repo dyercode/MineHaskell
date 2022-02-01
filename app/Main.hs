@@ -1,3 +1,5 @@
+{-# LANGUAGE LambdaCase #-}
+
 module Main where
 
 import Data.Bitraversable
@@ -6,7 +8,8 @@ import Data.List
 import Data.Maybe
 import MolecularAssembler
   ( Blocks (..),
-    Dimensions,
+    LegalAssembler,
+    calcBlocksIn,
     calcBlocksNeeded,
     createCube,
     createLegalAssembler,
@@ -14,14 +17,24 @@ import MolecularAssembler
 
 main :: IO ()
 main =
-  -- do
-  -- mapM_ print findUpDowns
-  case (createCube 3, createCube 4) of
-    (Success a, Success b) -> print (calcBlocksNeeded a b)
-    (Failure f, _) -> print ("first dimensions too small\n" ++ show f)
-    (_, Failure f) -> print ("second dimensions too small\n" ++ show f)
+  mapM_
+    (print . (\a -> (a, calcBlocksIn a)))
+    ( mapMaybe
+        ( \case
+            Failure _ -> Nothing
+            Success s -> Just s
+        )
+        [ createCube 3,
+          createLegalAssembler 3 3 4,
+          createLegalAssembler 3 4 4,
+          createCube 4,
+          createLegalAssembler 3 3 5,
+          createLegalAssembler 3 3 6,
+          createLegalAssembler 3 3 7
+        ]
+    )
 
-findUpDowns :: [((Dimensions, Dimensions), Blocks)]
+findUpDowns :: [((LegalAssembler, LegalAssembler), Blocks)]
 findUpDowns =
   let pairsWithNeeded = map (\p -> (p, uncurry calcBlocksNeeded p)) ohDeargod
    in filter (isUpAndDown . snd) pairsWithNeeded
@@ -47,7 +60,7 @@ nums =
           return (a, b, c)
 
 -- | create all legal assemblers up to size 10,
-ohDeargodOld :: [(Dimensions, Dimensions)]
+ohDeargodOld :: [(LegalAssembler, LegalAssembler)]
 ohDeargodOld =
   catMaybes
     ( do
@@ -57,7 +70,7 @@ ohDeargodOld =
     )
 
 -- | create all legal assemblers up to size 10,
-ohDeargod :: [(Dimensions, Dimensions)]
+ohDeargod :: [(LegalAssembler, LegalAssembler)]
 ohDeargod =
   mapMaybe
     (bitraverse cd cd)
@@ -72,7 +85,7 @@ unexplain v = case v of
   Success a -> Just a
   Failure _ -> Nothing
 
-cd :: (Int, Int, Int) -> Maybe Dimensions
+cd :: (Int, Int, Int) -> Maybe LegalAssembler
 cd (l, w, h) = unexplain (createLegalAssembler l w h)
 
 dm :: (Maybe a, Maybe b) -> Maybe (a, b)
