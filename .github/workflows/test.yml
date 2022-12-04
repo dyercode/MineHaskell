@@ -1,13 +1,12 @@
 on: [push]
 name: build
 jobs:
-  runhaskell:
+  tests:
     name: MolecularAssembler Test
     runs-on: ubuntu-latest # or macOS-latest, or windows-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: haskell/actions/setup@v1
-        with:
-          ghc-version: '9.0' # Resolves to the latest point release of GHC 8.8
-          cabal-version: '3.8.1.0' # Exact version of Cabal
-      - run: cabal test --test-show-details=streaming
+    - uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v18
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
+    - run: nix-build release.nix
