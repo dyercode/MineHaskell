@@ -1,0 +1,3 @@
+commands:
+  release: nix-build release.nix
+  test: cabal test test:tests --test-show-details=streaming # seems people just run cabal test, not nix.

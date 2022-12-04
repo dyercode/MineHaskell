@@ -8,3 +8,5 @@ dist
 *.ps
 *.prof
 *.aux
+.direnv
+result
