@@ -83,7 +83,7 @@ unitTests =
 
 compareAllBlocks :: Int -> Int -> Int -> Bool
 compareAllBlocks a b c =
-  let creater = (\(a', b', c') -> createLegalAssembler a' b' c')
+  let creater (a', b', c') = createLegalAssembler a' b' c'
       farter = Data.Validation.validationToEither . second calcBlocksIn . creater
       thing = mapM farter [(a, b, c), (a, c, b), (b, a, c), (b, c, a), (c, a, b), (c, b, a)]
    in case thing of

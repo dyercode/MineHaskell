@@ -7,6 +7,6 @@ pkgs.mkShell {
     pkgs.ghc
   ];
   shellHook = ''
-    cabal update
+    # cabal update # as predicted, a bit agressive.
   '';
 }
