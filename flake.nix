@@ -13,7 +13,7 @@
       in {
         devShells.default = pkgs.mkShell {
           nativeBuildInputs = [
-            dev.defaultPackage.${system}
+            dev.packages.${system}.default
             pkgs.cabal2nix
             pkgs.nix-prefetch-git
             pkgs.cabal-install

@@ -43,10 +43,10 @@ test_property_dimensions_interchangeable =
     l <- forAll genValidDims
     w <- forAll genValidDims
     h <- forAll genValidDims
-    test_block_count_dimmension_commutative l w h
+    test_block_count_dimension_commutative l w h
 
-test_dimmension_growth :: Property
-test_dimmension_growth =
+test_dimension_growth :: Property
+test_dimension_growth =
   property $ do
     l <- forAll genValidDims
     w <- forAll genValidDims
@@ -61,11 +61,11 @@ hedgehogTests =
   testGroup
     "Property Tests"
     [ testProperty
-        "dimmensions are interchangeable in regards to block count"
+        "dimensions are interchangeable in regards to block count"
         test_property_dimensions_interchangeable,
       testProperty
         "cores grow faster than vents grow faster than walls"
-        test_dimmension_growth
+        test_dimension_growth
     ]
 
 unitTests :: TestTree
@@ -90,8 +90,8 @@ compareAllBlocks a b c =
         Right x -> allEqual x
         Left _ -> False
 
-test_block_count_dimmension_commutative :: (MonadTest m) => Int -> Int -> Int -> m ()
-test_block_count_dimmension_commutative a b c =
+test_block_count_dimension_commutative :: (MonadTest m) => Int -> Int -> Int -> m ()
+test_block_count_dimension_commutative a b c =
   Hedgehog.assert (compareAllBlocks a b c)
 
 floatDiv :: Integral a => a -> a -> Double
