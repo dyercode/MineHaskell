@@ -20,10 +20,7 @@ main =
   mapM_
     (print . (\a -> (a, calcBlocksIn a)))
     ( mapMaybe
-        ( \case
-            Failure _ -> Nothing
-            Success s -> Just s
-        )
+        unexplain
         [ createCube 3,
           createLegalAssembler 3 3 4,
           createLegalAssembler 3 4 4,

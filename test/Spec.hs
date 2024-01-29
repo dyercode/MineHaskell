@@ -1,8 +1,4 @@
-module Main
-  ( main,
-    tests,
-  )
-where
+module Main (main, tests) where
 
 import Data.Bifunctor (second)
 import Data.Either.Validation
@@ -34,8 +30,10 @@ genPositiveInt :: Gen Int
 genPositiveInt =
   Gen.int (Range.linear 0 10000)
 
-allEqual :: Eq a => [a] -> Bool
-allEqual xs = all (== head xs) (tail xs)
+allEqual :: (Eq a) => [a] -> Bool
+allEqual [] = False
+allEqual [_] = True
+allEqual (h : t) = all (== h) t
 
 test_property_dimensions_interchangeable :: Property
 test_property_dimensions_interchangeable =
@@ -94,7 +92,7 @@ test_block_count_dimension_commutative :: (MonadTest m) => Int -> Int -> Int -> 
 test_block_count_dimension_commutative a b c =
   Hedgehog.assert (compareAllBlocks a b c)
 
-floatDiv :: Integral a => a -> a -> Double
+floatDiv :: (Integral a) => a -> a -> Double
 floatDiv a b = fromIntegral a / fromIntegral b
 
 compareGrowth :: Int -> Int -> Int -> Int -> Int -> Int -> Bool
@@ -110,10 +108,10 @@ compareGrowth l w h gl gw gh =
                        ventScale = floatDiv (vent grown) (vent before)
                        coreScale = floatDiv (core grown) (core before)
                     in wallScale < ventScale && ventScale < coreScale
-                 _ -> False
+                 _eitherFailure -> False
              )
        )
 
-test_property_scaling :: MonadTest m => Int -> Int -> Int -> Int -> Int -> Int -> m ()
+test_property_scaling :: (MonadTest m) => Int -> Int -> Int -> Int -> Int -> Int -> m ()
 test_property_scaling l w h gl gw gh =
   Hedgehog.assert (compareGrowth l w h gl gw gh)

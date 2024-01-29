@@ -1,5 +1,5 @@
 {
-  description = "Achievement sersr";
+  description = "calclulate block types needed for an assembler upgrade";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -20,7 +20,6 @@
             pkgs.ghc
           ];
           shellHook = ''
-            # cabal update # as predicted, a bit agressive.
           '';
         };
       });

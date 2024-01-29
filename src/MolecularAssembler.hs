@@ -1,3 +1,5 @@
+{-# LANGUAGE GADTs #-}
+
 module MolecularAssembler
   ( createCube,
     calcBlocksNeeded,
@@ -12,21 +14,18 @@ where
 import Data.Bifunctor
 import Data.Either.Validation
 
-data Dimensions = Dimensions
-  { length :: Int,
-    width :: Int,
-    height :: Int
-  }
+data Dimensions where
+  Dimensions ::
+    {length :: Int, width :: Int, height :: Int} ->
+    Dimensions
   deriving (Show, Eq)
 
-data Blocks = Blocks
-  { wall :: Int,
-    vent :: Int,
-    core :: Int
-  }
+data Blocks where
+  Blocks :: {wall :: Int, vent :: Int, core :: Int} -> Blocks
   deriving (Show, Eq)
 
-data LegalAssembler = LegalAssembler Int Int Int
+data LegalAssembler where
+  LegalAssembler :: Int -> Int -> Int -> LegalAssembler
   deriving (Show, Eq)
 
 checkSmallness :: Int -> String -> Validation [String] Int
@@ -49,9 +48,13 @@ calcBlocksNeeded :: LegalAssembler -> LegalAssembler -> Blocks
 calcBlocksNeeded assembler desired =
   calcBlocksIn desired -# calcBlocksIn assembler
 
+infixl 6 +#
+
 (+#) :: Dimensions -> Dimensions -> Dimensions
 (Dimensions al aw ah) +# (Dimensions il iw ih) =
   Dimensions (al + il) (aw + iw) (ah + ih)
+
+infixl 6 -#
 
 (-#) :: Blocks -> Blocks -> Blocks
 (Blocks wall1 vent1 core1) -# (Blocks wall2 vent2 core2) =
